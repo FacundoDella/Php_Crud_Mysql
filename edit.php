@@ -20,13 +20,18 @@ if (isset($_POST['update'])) {
     $title = $_POST['title'];
     $description = $_POST['description'];
 
-    $query = "UPDATE task SET title='$title', description='$description' WHERE id=$id";
-    $result = mysqli_query($conn, $query);
+    if (strlen($title) > 0 && strlen($description) > 0) {
+        $query = "UPDATE task SET title='$title', description='$description' WHERE id=$id";
+        $result = mysqli_query($conn, $query);
 
-    $_SESSION['message'] = "Task Updated Successfully";
-    $_SESSION['message_type'] = "info";
+        $_SESSION['message'] = "Task Updated Successfully";
+        $_SESSION['message_type'] = "info";
 
-    header("Location: index.php");
+        header("Location: index.php");
+    } else {
+        $_SESSION['messageEdit'] = 'You Must Write Something';
+        $_SESSION['message_typeEdit'] = 'danger';
+    }
 }
 ?>
 
@@ -37,6 +42,14 @@ include("includes/header.php")
 <div class="container p-4">
     <div class="row">
         <div class="col-md-4 mx-auto">
+            <?php
+            if (isset($_SESSION['messageEdit'])) { ?>
+                <div class="alert alert-<?= $_SESSION['message_typeEdit'] ?> alert-dismissible fade show " role="alert">
+                    <?= $_SESSION['messageEdit'] ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php session_unset(); //Vacia la session, para que el mensaje se vaya cuando actualice la pagina o cuando lo quite
+            } ?>
             <div class="card card-body">
                 <form action="edit.php?id=<?php echo $id ?>" method="POST">
                     <div class="form-group mb-2">
