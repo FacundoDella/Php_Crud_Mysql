@@ -5,7 +5,7 @@ session_start();
 $conn = mysqli_connect(
     'localhost',
     'root',
-    '',
+    'Wmlizxc123',
     'php_mysql_crud'
 );
 
